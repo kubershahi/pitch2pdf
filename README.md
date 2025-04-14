@@ -1,49 +1,59 @@
-# Pitch Presentation to PDF
-This project uses [Selenium](https://www.selenium.dev/) and [ChromeDriver](https://googlechromelabs.github.io/chrome-for-testing/) to automatically crawl through a public [Pitch.com](https://pitch.com) presentation, capture each slide, and save them all as a single PDF.
----
+# Pitch2PDF
 
-## 📸 Features
+A Python tool to convert Pitch.com presentations to PDF files.
 
-- Automatically navigates through all slides using arrow keys
-- Waits for slide content to fully load before capturing
-- Takes high-resolution screenshots
-- Combines all slide images into a single PDF
----
+## Features
 
-## 📦 Requirements
+- Converts Pitch.com presentations to PDF
+- Handles multiple slides
+- Preserves slide quality
+- Command-line interface
+
+## Requirements
 
 - Python 3.8+
 - Google Chrome installed
 - ChromeDriver version **matching your Chrome version**
 
-Install Python dependencies:
+## Installation
 
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/pitch2pdf.git
+cd pitch2pdf
+```
+
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
----
 
-## 🚀 How to Use
+3. Install ChromeDriver:
 
-### Step 1: Check Your Chrome Version
+#### Step 1: Check Chrome Version
+- Open Chrome browser
+- Visit: `chrome://settings/help`
+- Note down your Chrome version number
 
-Open Chrome and visit: chrome://settings/help
----
+#### Step 2: Download ChromeDriver
+- Visit [Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/)
+- Find the version matching your Chrome browser
+- Download the appropriate `chromedriver` for your operating system
+- Extract the downloaded file
+- Save the `chromedriver` binary in your project directory
 
-### Step 2: Download Matching ChromeDriver
-
-1. Go to: [https://googlechromelabs.github.io/chrome-for-testing/](https://googlechromelabs.github.io/chrome-for-testing/)
-2. Locate your exact Chrome version
-3. Download the correct `chromedriver` binary for your OS
-4. Extract it and save the path to the binary
----
-
-### Step 3: Run the script
-
-Run the script using:
+## Usage
 
 ```bash
 python pitch2pdf.py \
-    --pitch_url https://pitch.com/v/spa2_-coordinates-transformations-and-perception-nkmrmy \
-    --chrome_driver ./chromedriver
+    --pitch_url "https://pitch.com/your-presentation-url" \
+    --chrome_driver "/path/to/chromedriver"
 ```
+
+### Arguments
+- `--pitch_url`: URL of the Pitch.com presentation (required)
+- `--chrome_driver`: Path to ChromeDriver (optional, defaults to "./chromedriver")
+
+## License
+
+MIT License
