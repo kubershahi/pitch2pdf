@@ -1,48 +1,49 @@
-# Pitch2PDF
+# Pitch Presentation to PDF
+This project uses [Selenium](https://www.selenium.dev/) and [ChromeDriver](https://googlechromelabs.github.io/chrome-for-testing/) to automatically crawl through a public [Pitch.com](https://pitch.com) presentation, capture each slide, and save them all as a single PDF.
+---
 
-A Python tool to convert Pitch.com presentations to PDF files.
+## 📸 Features
 
-## Features
+- Automatically navigates through all slides using arrow keys
+- Waits for slide content to fully load before capturing
+- Takes high-resolution screenshots
+- Combines all slide images into a single PDF
+---
 
-- Converts Pitch.com presentations to PDF
-- Handles multiple slides
-- Preserves slide quality
-- Command-line interface
-
-## Requirements
+## 📦 Requirements
 
 - Python 3.8+
-- Chrome browser
-- ChromeDriver
+- Google Chrome installed
+- ChromeDriver version **matching your Chrome version**
 
-## Installation
+Install Python dependencies:
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/pitch2pdf.git
-cd pitch2pdf
-```
-
-2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+---
 
-3. Install ChromeDriver:
-- macOS: `brew install chromedriver`
-- Ubuntu/Debian: `sudo apt-get install chromedriver`
-- Windows: Download from https://chromedriver.chromium.org/downloads
+## 🚀 How to Use
 
-## Usage
+### Step 1: Check Your Chrome Version
+
+Open Chrome and visit: chrome://settings/help
+---
+
+### Step 2: Download Matching ChromeDriver
+
+1. Go to: [https://googlechromelabs.github.io/chrome-for-testing/](https://googlechromelabs.github.io/chrome-for-testing/)
+2. Locate your exact Chrome version
+3. Download the correct `chromedriver` binary for your OS
+4. Extract it and save the path to the binary
+---
+
+### Step 3: Run the script
+
+Run the script using:
 
 ```bash
-python pitch2pdf.py --pitch_url "https://pitch.com/your-presentation-url" --chrome_driver "/path/to/chromedriver"
+python pitch2pdf.py \
+    --pitch_url https://pitch.com/v/spa2_-coordinates-transformations-and-perception-nkmrmy \
+    --chrome_driver ./chromedriver
 ```
-
-Arguments:
-- `--pitch_url`: URL of the Pitch.com presentation (required)
-- `--chrome_driver`: Path to ChromeDriver (optional, defaults to "./chromedriver")
-
-## License
-
-MIT License
