@@ -33,4 +33,4 @@ ENV/
 # Project specific
 slide_images/
 *.pdf
-chromedriver
+/chromedriver/
