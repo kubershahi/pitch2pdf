@@ -30,6 +30,9 @@ ENV/
 *.swp
 *.swo
 
+# Mac
+.DS_Store
+
 # Project specific
 slide_images/
 *.pdf
