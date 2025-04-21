@@ -1,6 +1,7 @@
+import argparse
 import os
 import re
-import argparse
+import time
 from hashlib import md5
 
 from PIL import Image
@@ -25,21 +26,20 @@ def capture_all_slides(pitch_url, chromedriver_path, max_slides=50):
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--autoplay-policy=no-user-gesture-required")  # Allow video autoplay
 
     # Launch driver
     service = Service(executable_path=chromedriver_path)
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
-    # time.sleep(10)
     driver.get(pitch_url)  # Let the page render
+    time.sleep(5)  # Initial wait time for page load
 
     output_pdf = re.sub(r'[\\/*?:"<>|]', "", driver.title.strip()) + ".pdf"
 
     actions = ActionChains(driver)
-
     image_paths = []
-
-    wait = WebDriverWait(driver, timeout=5)
+    wait = WebDriverWait(driver, timeout=10)  # Increased timeout
     actions = ActionChains(driver)
     prev_hash = ""
 
@@ -48,6 +48,40 @@ def capture_all_slides(pitch_url, chromedriver_path, max_slides=50):
 
         # Wait for slide container to load
         slide_element = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "div[class*='canvas-precision-wrapper']")))
+
+        # Check for videos in the slide
+        videos = driver.find_elements(By.TAG_NAME, "video")
+        if videos:
+            print(f"Found {len(videos)} video(s) in slide {i + 1}")
+
+            for idx, video in enumerate(videos):
+                try:
+                    # Try to remove any loop attribute on videos
+                    driver.execute_script("arguments[0].removeAttribute('loop');", video)
+
+                    # Get video duration and wait for it to finish
+                    video_duration = driver.execute_script("return arguments[0].duration", video)
+                    if video_duration and video_duration > 0:
+                        print(f"Waiting for video {idx + 1} to finish (duration: {video_duration:.1f}s)")
+
+                        # Start playback
+                        driver.execute_script("arguments[0].play();", video)
+
+                        # Wait for video to finish with a small buffer
+                        wait_time = video_duration + 1
+                        time.sleep(wait_time)
+                    else:
+                        print(f"Could not determine video duration for video {idx + 1}")
+                        # Just wait a default time
+                        time.sleep(5)
+                except Exception as e:
+                    print(f"Error handling video: {e}")
+                    time.sleep(5)  # Wait default time
+
+        # Additional pause to ensure slide is fully loaded
+        time.sleep(2)
+
+        # Get slide hash after video has played
         current_html = slide_element.get_attribute("innerHTML")
         current_hash = md5(current_html.encode("utf-8")).hexdigest()
 
@@ -81,7 +115,7 @@ def capture_all_slides(pitch_url, chromedriver_path, max_slides=50):
         print(f"[✓] PDF saved as: {output_pdf}")
     else:
         print("No images captured. PDF not generated.")
-    
+
     # Remove all images
     for image in image_paths:
         os.remove(image)
